@@ -252,6 +252,8 @@
     </div>
   </footer>
 
-  <script type="module" src="js/main.js"></script>
+  <!-- Classic (non-module) scripts, so the page also works when index.html is opened directly from disk. -->
+  <script src="js/vendor/observablehq-runtime-5.9.9.umd.js"></script>
+  <script src="js/main.js"></script>
 </body>
 </html>

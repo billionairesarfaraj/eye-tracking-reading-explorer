@@ -5,7 +5,12 @@
 // into the website layout. The notebook's cell code is not modified:
 // data loading, processing, and every chart come from the notebook.
 
-import {Runtime, Inspector} from "./vendor/observablehq-runtime-5.9.9.js";
+// Plain (non-module) script so the page also works when opened from disk
+// (file://), where browsers block <script type="module">.
+(function () {
+"use strict";
+
+const {Runtime, Inspector} = window.observablehq; // from js/vendor/observablehq-runtime-5.9.9.umd.js
 
 // ---- Notebook source ----------------------------------------------------
 // Pinned to the published version so the site stays reproducible.
@@ -15,7 +20,7 @@ const VERSION = 213;
 const REMOTE_MODULE = `https://api.observablehq.com/${NOTEBOOK}@${VERSION}.js?v=4`;
 // Archived copy of the same compiled module (fallback if the API is unreachable).
 // Its file attachments still point at Observable's file CDN.
-const LOCAL_MODULE = new URL(`../notebook/miadavis-untitled-4@${VERSION}.js`, import.meta.url).href;
+const LOCAL_MODULE = new URL(`notebook/miadavis-untitled-4@${VERSION}.js`, document.baseURI).href;
 
 // ---- Helpers ------------------------------------------------------------
 const $ = (sel, root = document) => root.querySelector(sel);
@@ -65,7 +70,7 @@ function updateLoadStatus() {
     loadStatus.textContent = `Some notebook data could not be loaded: ${dataErrors.join("; ")}`;
   } else if (pendingData.size) {
     loadStatus.className = "load-status";
-    loadStatus.textContent = "Loading notebook data from Observable…";
+    loadStatus.textContent = "Loading the notebook and its eye-tracking data from Observable. This can take 10–30 seconds…";
   } else {
     loadStatus.className = "load-status is-ready";
     loadStatus.textContent = `Notebook version ${VERSION} loaded. All data is served from Observable.`;
@@ -236,3 +241,4 @@ async function main() {
 }
 
 main();
+})();

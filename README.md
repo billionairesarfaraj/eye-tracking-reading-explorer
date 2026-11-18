@@ -65,7 +65,7 @@ viewof fullReader = Inputs.select(
 
 ## Technologies
 
-- JavaScript (ES modules), HTML, CSS; no build step and no framework
+- JavaScript, HTML, CSS; no build step and no framework
 - [Observable Runtime](https://github.com/observablehq/runtime) 5.9.9 (vendored in `js/vendor/`, ISC license)
 - Observable standard library, loaded by the runtime from jsDelivr: Observable Plot 0.6.16,
   Observable Inputs 0.11.0, d3 7.9.0, htl, JSZip 3.10.1
@@ -81,29 +81,37 @@ eye-tracking-website/
 │   └── observable-inspector.css       Observable Inspector styles (from the notebook export)
 ├── js/
 │   ├── main.js                        Loads the notebook and wires cells to the page
-│   └── vendor/observablehq-runtime-5.9.9.js
+│   └── vendor/observablehq-runtime-5.9.9.umd.js
 ├── notebook/
 │   └── miadavis-untitled-4@213.js     Archived compiled notebook module (fallback and reference)
 ├── .nojekyll                          Serve files as-is on GitHub Pages
 └── README.md
 ```
 
-## Running locally
+## How to run it
 
-ES modules need a web server (opening `index.html` as a file won't work). From this folder:
+**Easiest: open the live site.** https://billionairesarfaraj.github.io/eye-tracking-reading-explorer/
+
+**From the ZIP:**
+
+1. Unzip the archive. Don't open `index.html` from inside the ZIP preview; extract the whole folder first.
+2. Double-click `eye-tracking-website/index.html` to open it in Chrome, Edge, or Firefox.
+3. Wait for the green "Notebook version 213 loaded" message under the page title. The first load downloads
+   the notebook and about 12–25 MB of eye-tracking data from Observable, which takes about 10–30 seconds.
+   Charts show a "Loading data…" badge until their data arrives.
+
+An internet connection is required: the notebook, its data, and its chart libraries are loaded from
+Observable and jsDelivr. Keep the tab in the foreground while it loads. Browsers pause background tabs,
+and the Observable Runtime waits until the tab is visible.
+
+**Optional, with a local web server** (closest to how the live site is served). From the
+`eye-tracking-website` folder:
 
 ```bash
 python3 -m http.server 8080
 ```
 
-or
-
-```bash
-npx http-server -p 8080
-```
-
-Then open http://localhost:8080. An internet connection is required: the notebook, its data, and its
-chart libraries are loaded from Observable and jsDelivr.
+Then open http://localhost:8080.
 
 ## Updating to a newer notebook version
 
@@ -127,3 +135,5 @@ upload the folder as-is.
   width and scroll sideways inside their card, so the passage text stays legible.
 - The Observable Runtime schedules work with `requestAnimationFrame`, so a page opened in a background tab
   starts computing when the tab is shown.
+- `main.js` and the runtime are loaded as classic (non-module) scripts. That's why `index.html` also works
+  when opened directly from disk, where browsers block `<script type="module">`.

@@ -176,7 +176,7 @@ h1 { font-size: clamp(30px, 4.2vw, 44px); margin: 0 0 14px; max-width: 22ch; }
 .slot.is-loading { min-height: 120px; }
 .slot.is-loading > * { opacity: .35; transition: opacity .2s; }
 .slot.is-loading::after {
-  content: "Computing…"; position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+  content: "Loading data…"; position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
   font: 500 13px var(--sans); color: var(--accent); background: var(--accent-soft);
   padding: 6px 12px 6px 30px; border-radius: 999px;
   background-image: radial-gradient(circle at 15px 50%, var(--accent) 4px, transparent 5px);

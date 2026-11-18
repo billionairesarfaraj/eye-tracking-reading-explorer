@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Eye-Tracking Reading Explorer</title>
+  <meta name="description" content="Interactive website prototype of eye-tracking reading visualizations, powered by an Observable notebook.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/observable-inspector.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M2 16s5-9 14-9 14 9 14 9-5 9-14 9S2 16 2 16z' fill='%23fff' stroke='%231e3a8a' stroke-width='2.5'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%232563eb'/%3E%3C/svg%3E">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="#top">
+        <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><path d="M2 16s5-9 14-9 14 9 14 9-5 9-14 9S2 16 2 16z" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="16" cy="16" r="5" fill="#2563eb"/></svg>
+        <span>Eye-Tracking Reading Explorer</span>
+      </a>
+      <nav class="site-nav" aria-label="Sections">
+        <a href="#reader">Reader</a>
+        <a href="#heatmap">Heatmap</a>
+        <a href="#scanpath">Scanpath</a>
+        <a href="#replay">Replay</a>
+        <a href="#conditions">Conditions</a>
+        <a href="#matched">Matched</a>
+        <a href="#about">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="intro" id="top">
+      <div class="wrap">
+        <p class="eyebrow">Research visualization prototype</p>
+        <h1>How readers move their eyes through a text</h1>
+        <p class="lede">
+          Word-level dwell time, fixation scanpaths, and fixation-by-fixation replays for individual readers,
+          plus reading-time and comprehension comparisons across reading goal, reading pass, and text difficulty.
+          Every chart on this page is computed live by the original Observable notebook.
+        </p>
+        <dl class="glance" aria-live="polite">
+          <div><dt>Participants</dt><dd data-stat="participants">…</dd></div>
+          <div><dt>Reading trials</dt><dd data-stat="trials">…</dd></div>
+          <div><dt>Condition groups</dt><dd data-stat="conditions">…</dd></div>
+          <div><dt>Notebook</dt><dd><a id="notebook-link" href="https://observablehq.com/@miadavis/untitled/4" target="_blank" rel="noopener">@miadavis/untitled/4</a></dd></div>
+        </dl>
+        <p class="load-status" id="load-status" role="status">Loading notebook…</p>
+      </div>
+    </section>
+
+    <!-- ============ Reader & trial selection (notebook Cells 4–9) ============ -->
+    <section class="section" id="reader" aria-labelledby="reader-h">
+      <div class="wrap">
+        <header class="section-head">
+          <p class="cell-ref">Notebook Cells 4–9</p>
+          <h2 id="reader-h">Choose a reader and a reading trial</h2>
+          <p>Pick one of the participants, then one of their reading trials. The heatmap, scanpath, replay, and matched comparison below all update to the selected trial.</p>
+        </header>
+
+        <div class="card selector-card">
+          <div class="selector-grid">
+            <div class="control">
+              <div class="slot" data-cell="viewof fullReader"></div>
+              <p class="hint">Participant data is loaded from the notebook's ZIP shards (about 12&nbsp;MB per shard), so switching readers can take a few seconds.</p>
+            </div>
+            <div class="control">
+              <div class="slot" data-cell="viewof fullTrialKey"></div>
+              <p class="hint">Trial number | reading goal | reading pass | text difficulty</p>
+            </div>
+          </div>
+
+          <div class="status-line" data-status="fullReaderData" role="status"></div>
+
+          <div class="stats-block">
+            <h3 class="mini-h">Participant-level fixation data <span class="cell-tag">Cell 7</span></h3>
+            <dl class="stats" id="reader-stats">
+              <div><dt>Participant</dt><dd data-k="participant">…</dd></div>
+              <div><dt>Total trials</dt><dd data-k="totalTrials">…</dd></div>
+              <div><dt>Trials with fixations</dt><dd data-k="trialsWithFixations">…</dd></div>
+              <div><dt>Total fixations</dt><dd data-k="totalFixations">…</dd></div>
+              <div><dt>Word areas</dt><dd data-k="totalWordAreas">…</dd></div>
+              <div><dt>First trial</dt><dd data-k="firstTrial">…</dd></div>
+            </dl>
+          </div>
+
+          <div class="stats-block">
+            <h3 class="mini-h">Selected trial <span class="cell-tag">Cell 9</span></h3>
+            <dl class="stats" id="trial-meta">
+              <div class="wide"><dt>Article</dt><dd data-k="article">…</dd></div>
+              <div><dt>Paragraph</dt><dd data-k="paragraph_id">…</dd></div>
+              <div><dt>Condition</dt><dd data-k="condition">…</dd></div>
+              <div><dt>Difficulty</dt><dd data-k="difficulty_level">…</dd></div>
+              <div><dt>Words</dt><dd data-k="n_words">…</dd></div>
+              <div><dt>Fixations</dt><dd data-k="n_fixations">…</dd></div>
+              <div><dt>Paragraph reading time</dt><dd data-k="PARAGRAPH_RT">…</dd></div>
+              <div><dt>Comprehension answer</dt><dd data-k="is_correct">…</dd></div>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Cell 11: heatmap ============ -->
+    <section class="section" id="heatmap" aria-labelledby="heatmap-h">
+      <div class="wrap">
+        <header class="section-head">
+          <p class="cell-ref">Notebook Cell 11</p>
+          <h2 id="heatmap-h">Word-level fixation heatmap</h2>
+          <p>Cumulative dwell time for each word of the passage. Darker colors indicate longer total fixation time. This is a word-level dwell-time heatmap, not pixel-level density. Hover a word for its dwell time and fixation count.</p>
+        </header>
+        <figure class="card figure">
+          <div class="figure-scroll"><div class="slot" data-cell="fullHeatmap"></div></div>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ============ Cell 12: scanpath ============ -->
+    <section class="section" id="scanpath" aria-labelledby="scanpath-h">
+      <div class="wrap">
+        <header class="section-head">
+          <p class="cell-ref">Notebook Cell 12</p>
+          <h2 id="scanpath-h">Fixation scanpath</h2>
+          <p>The spatial and temporal sequence of fixations. Blue lines show transitions between fixations, and larger circles represent longer fixation durations. Hover a circle for the fixation index, duration, and word.</p>
+        </header>
+        <figure class="card figure">
+          <div class="figure-scroll"><div class="slot" data-cell="fullScanpath"></div></div>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ============ Cells 13–14: replay ============ -->
+    <section class="section" id="replay" aria-labelledby="replay-h">
+      <div class="wrap">
+        <header class="section-head">
+          <p class="cell-ref">Notebook Cells 13–14</p>
+          <h2 id="replay-h">Eye-movement scanpath replay</h2>
+          <p>Reconstructs the reading process fixation by fixation. Playback follows fixation order rather than real elapsed time. The red circle highlights the current fixation.</p>
+        </header>
+        <div class="card figure">
+          <div class="slot replay-controls" data-cell="viewof fullReplayStep"></div>
+          <div class="figure-scroll"><div class="slot" data-cell="fullReplayPlot"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Cells 15–19: condition comparisons ============ -->
+    <section class="section section-alt" id="conditions" aria-labelledby="conditions-h">
+      <div class="wrap">
+        <header class="section-head">
+          <p class="cell-ref">Notebook Cells 15–19</p>
+          <h2 id="conditions-h">Reading conditions across all participants</h2>
+          <p>Descriptive summaries from all participants. Use the filters to narrow the comparison. “All” includes every level of a condition. Text difficulty: <strong>Adv</strong> = Advanced, <strong>Ele</strong> = Elementary.</p>
+        </header>
+
+        <div class="card filters-card">
+          <h3 class="mini-h">Condition filters <span class="cell-tag">Cell 15</span></h3>
+          <div class="slot filters" data-cell="viewof fullConditionFilters"></div>
+        </div>
+
+        <figure class="card figure">
+          <figcaption>
+            <h3>Reading time comparison across conditions <span class="cell-tag">Cell 16</span></h3>
+            <p>Mean reading time for each combination of reading goal, reading pass, and text difficulty. The measure is chosen by “Reading Time Measure”.</p>
+          </figcaption>
+          <div class="figure-scroll"><div class="slot" data-cell="fullReadingTimePlot"></div></div>
+        </figure>
+
+        <figure class="card figure">
+          <figcaption>
+            <h3>Reading comprehension accuracy <span class="cell-tag">Cell 17</span></h3>
+            <p>Percentage of correct comprehension responses, filtered the same way as the reading-time chart.</p>
+          </figcaption>
+          <div class="figure-scroll"><div class="slot" data-cell="fullAccuracyPlot"></div></div>
+        </figure>
+
+        <figure class="card figure">
+          <figcaption>
+            <h3>First vs. repeated reading <span class="cell-tag">Cell 18</span></h3>
+            <p>Reading time during first and repeated reading. The reading-pass filter is ignored here because both levels are compared.</p>
+          </figcaption>
+          <div class="figure-scroll"><div class="slot" data-cell="fullRepetitionPlot"></div></div>
+        </figure>
+
+        <figure class="card figure">
+          <figcaption>
+            <h3>Advanced vs. elementary text difficulty <span class="cell-tag">Cell 19</span></h3>
+            <p>Reading time for Advanced and Elementary texts. Both difficulty levels are kept regardless of the difficulty filter.</p>
+          </figcaption>
+          <div class="figure-scroll"><div class="slot" data-cell="fullDifficultyPlot"></div></div>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ============ Cell 20: matched comparison ============ -->
+    <section class="section" id="matched" aria-labelledby="matched-h">
+      <div class="wrap">
+        <header class="section-head">
+          <p class="cell-ref">Notebook Cell 20</p>
+          <h2 id="matched-h">Matched paragraph comparison</h2>
+          <p>Finds other trials with the same article, paragraph, and difficulty as the selected trial, varying only the comparison dimension, and shows both readers' word-level dwell time on a common color scale.</p>
+          <p class="note">Comparison dimension: <strong id="matched-dimension">…</strong>. Change it with “Matched Eye-Tracking Comparison” in the <a href="#conditions">condition filters</a>; change the base trial in <a href="#reader">reader selection</a>.</p>
+        </header>
+        <div class="card figure">
+          <div class="slot matched-select" data-cell="viewof fullMatchedTrialKey"></div>
+          <div class="figure-scroll"><div class="slot" data-cell="fullMatchedHeatmap"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ About ============ -->
+    <section class="section section-alt" id="about" aria-labelledby="about-h">
+      <div class="wrap about">
+        <header class="section-head">
+          <h2 id="about-h">About this prototype</h2>
+        </header>
+        <div class="about-grid">
+          <div class="card">
+            <h3>Source notebook</h3>
+            <p>All data loading, processing, and charts come from Mia Davis's Observable notebook
+              <a href="https://observablehq.com/@miadavis/untitled/4" target="_blank" rel="noopener">@miadavis/untitled/4</a>
+              (version <span id="nb-version">213</span>). The page imports the published notebook with the Observable Runtime
+              and places each cell's output into the layout. The cell code runs unchanged.</p>
+            <p class="small" id="nb-source">Module source: loading…</p>
+          </div>
+          <div class="card">
+            <h3>Data</h3>
+            <p>The data files are the notebook's own attachments, served by Observable:</p>
+            <ul class="small">
+              <li><code>onestop_trial_catalog_full.csv</code>: one row per reading trial</li>
+              <li><code>onestop_condition_summary_full.csv</code>: condition-level means and accuracy</li>
+              <li><code>onestop_reader_index_full.csv</code>: participant → ZIP shard lookup</li>
+              <li><code>onestop_reader_shard_00–11.zip</code>: per-participant fixations and word areas</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Participant selector</h3>
+            <p>In the published notebook, Cell 4 (“Select a Participant from the Full Dataset”) is empty, so <code>fullReader</code> is undefined and the per-reader cells show <em>RuntimeError: fullReader is not defined</em>. This site adds that single cell as a dropdown of every <code>participant_id</code> in the reader index. It is only added if the notebook doesn't define <code>fullReader</code> itself.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>Eye-Tracking Reading Explorer, a website prototype built on the Observable notebook by Mia Davis. Built with the Observable Runtime, Observable Plot, and Observable Inputs.</p>
+    </div>
+  </footer>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
